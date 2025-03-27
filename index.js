@@ -1,38 +1,48 @@
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
+const { Server } = require('socket.io');
+const cors = require('cors');
 
-// 创建Express应用
 const app = express();
 const server = http.createServer(app);
 
-// 设置CORS，允许前端连接
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+// 定義允許的來源
+const allowedOrigins = [
+  'http://localhost:3000', // 本地前端
+  'https://chat-client-six-kappa.vercel.app/', // 線上前端
+];
+
+// 設定 CORS
+const corsOptions = {
+  origin: (origin, callback) => {
+    // 允許來自 allowedOrigins 的請求，或沒有 origin（例如直接訪問後端）
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+};
+
+// 應用 CORS 到 Express
+app.use(cors(corsOptions));
+
+// 應用 CORS 到 Socket.IO
+const io = new Server(server, {
+  cors: corsOptions,
 });
 
-// 监听连接事件
 io.on('connection', (socket) => {
-  console.log('新用户连接，ID:', socket.id);
-  
-  // 监听发送消息事件
-  socket.on('sendMessage', (message) => {
-    console.log('收到消息:', message);
-    // 广播消息给所有客户端
-    io.emit('receiveMessage', message);
+  console.log('使用者連線:', socket.id);
+  socket.on('sendMessage', (data) => {
+    io.emit('receiveMessage', data);
   });
-  
-  // 监听断开连接事件
   socket.on('disconnect', () => {
-    console.log('用户断开连接，ID:', socket.id);
+    console.log('使用者斷線:', socket.id);
   });
 });
 
-// 启动服务器，监听3001端口
-const PORT = 3001;
-server.listen(PORT, () => {
-  console.log(`服务器运行在 http://localhost:${PORT}`);
-}); 
+server.listen(3001, () => {
+  console.log('後端運行於 http://localhost:3001');
+});
