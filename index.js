@@ -9,9 +9,9 @@ const server = http.createServer(app);
 // 定義允許的來源
 const allowedOrigins = [
   'http://localhost:3000', // 本地前端
-  'https://chat-client-six-kappa.vercel.app/',
-  'https://chat-client-git-master-jieyus-projects-8588ac7f.vercel.app/',
-  'https://chat-client-f173h7ea2-jieyus-projects-8588ac7f.vercel.app/', // 線上前端
+  'https://chat-client-six-kappa.vercel.app',
+  'https://chat-client-git-master-jieyus-projects-8588ac7f.vercel.app',
+  'https://chat-client-f173h7ea2-jieyus-projects-8588ac7f.vercel.app'
 ];
 
 // 設定 CORS
@@ -25,6 +25,7 @@ const corsOptions = {
     }
   },
   methods: ['GET', 'POST'],
+  credentials: true
 };
 
 // 應用 CORS 到 Express
