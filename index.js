@@ -10,8 +10,8 @@ const server = http.createServer(app);
 const allowedOrigins = [
   'http://localhost:3000', // 本地前端
   'https://chat-client-six-kappa.vercel.app/',
-  'chat-client-git-master-jieyus-projects-8588ac7f.vercel.app',
-  'chat-client-f173h7ea2-jieyus-projects-8588ac7f.vercel.app' // 線上前端
+  'https://chat-client-git-master-jieyus-projects-8588ac7f.vercel.app/',
+  'https://chat-client-f173h7ea2-jieyus-projects-8588ac7f.vercel.app/' // 線上前端
 ];
 
 // 設定 CORS
